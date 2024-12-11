@@ -4,9 +4,31 @@
 
     <select id="findSaldoUser" resultType="com.example.tesnutech.model.SaldoUserModel">
         select
+        a.id_user as idUser,
         a.nominal_saldo as balance
         from saldo_user a
         where a.id_user = #{idUser}
     </select>
+
+    <insert id="addSaldoUser" parameterType="com.example.tesnutech.pojos.SaldoUserPojo">
+        insert into saldo_user(
+        id_saldo,
+        id_user,
+        nominal_saldo,
+        created_at)
+        values (
+        #{idSaldo},
+        #{idUser},
+        #{nominalSaldo},
+        now())
+    </insert>
+
+    <update id="updateSaldoUser" parameterType="com.example.tesnutech.pojos.SaldoUserPojo">
+        update saldo_user
+        set
+        nominal_saldo = #{top_up_amount},
+        created_at = now()
+        where id_user = #{idUser}
+    </update>
 
 </mapper>

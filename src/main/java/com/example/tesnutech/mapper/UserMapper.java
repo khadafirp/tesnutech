@@ -6,8 +6,6 @@ import com.example.tesnutech.pojos.HistoryLoginPojo;
 import com.example.tesnutech.pojos.UserPojo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Mapper
 public interface UserMapper {

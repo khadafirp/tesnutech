@@ -1,9 +1,11 @@
 package com.example.tesnutech.services;
 
+import com.example.tesnutech.mapper.SaldoUserMapper;
 import com.example.tesnutech.mapper.UserMapper;
 import com.example.tesnutech.model.UserModel;
 import com.example.tesnutech.pojos.HistoryLoginPojo;
 import com.example.tesnutech.pojos.LoginPojo;
+import com.example.tesnutech.pojos.SaldoUserPojo;
 import com.example.tesnutech.pojos.UserPojo;
 import com.example.tesnutech.utils.EmailValidationUtil;
 import com.example.tesnutech.utils.JwtUtil;
@@ -26,6 +28,9 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private SaldoUserMapper saldoUserMapper;
+
     @Value("${security.jwt.expiration-time}")
     String expiredTime;
 
@@ -39,8 +44,13 @@ public class UserService {
                 String uuidString = uuid.toString();
 
                 param.setIdUser(uuidString);
-
                 userMapper.daftarAkun(param);
+
+                SaldoUserPojo saldoUserParam = new SaldoUserPojo();
+                saldoUserParam.setIdSaldo(UUID.randomUUID().toString());
+                saldoUserParam.setIdUser(uuidString);
+                saldoUserParam.setNominalSaldo(0);
+                saldoUserMapper.addSaldoUser(saldoUserParam);
 
                 response.put("statusCode", HttpStatus.OK.value());
                 response.put("message", "daftar sukses.");
