@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.tesnutech.mapper.UserMapper">
+
+    <select id="findUser" resultType="com.example.tesnutech.model.UserModel">
+        select
+        a.user_id as idUser,
+        a.email as email,
+        a.password as password
+        from user a
+        where a.email = #{email}
+        and a.password = #{password}
+    </select>
+
+    <insert id="daftarAkun" parameterType="com.example.tesnutech.pojos.UserPojo">
+        insert into user(
+        user_id,
+        email,
+        password,
+        nama_lengkap,
+        created_at)
+        values(
+        #{idUser},
+        #{email},
+        #{password},
+        #{namaLengkap},
+        now())
+    </insert>
+    
+    <select id="findUserToken" resultType="com.example.tesnutech.model.HistoryLoginModel">
+        select
+        a.id_history_login as idHistoryLogin,
+        a.id_user as idUser,
+        a.token as token,
+        a.expired_time as expiredTime
+        from history_login a
+        where a.token = #{token}
+        order by a.created_at desc
+        only fetch first rows
+    </select>
+
+    <insert id="addNewToken" parameterType="com.example.tesnutech.pojos.HistoryLoginPojo">
+        insert into history_login(
+        id_history_login,
+        id_user,
+        token,
+        expired_time,
+        created_at)
+        values(
+        #{idHistoryLogin},
+        #{idUser},
+        #{token},
+        #{expiredTime},
+        now())
+    </insert>
+
+</mapper>
