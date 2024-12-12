@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface HistoryTransaksiMapper {
 
-    void addNewTransaksi(HistoryTransaksiPojo param);
+    int countHistoryTransaksi();
+
+    void tambahTransaksi(HistoryTransaksiPojo param);
 
 }

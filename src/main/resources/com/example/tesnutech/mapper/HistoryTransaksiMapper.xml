@@ -2,11 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.tesnutech.mapper.HistoryTransaksiMapper">
 
-    <insert id="addNewTransaksi" parameterType="com.example.tesnutech.pojos.HistoryTransaksiPojo">
+    <insert id="tambahTransaksi" parameterType="com.example.tesnutech.pojos.HistoryTransaksiPojo">
         insert into history_transaksi(
-        id_history_transksi,
+        id_history_transaksi,
         id_user,
         id_ppob_merchant,
+        invoice_number,
         service_code,
         service_name,
         jenis,
@@ -17,6 +18,7 @@
         #{idHistoryTransaksi},
         #{idUser},
         #{idPpobMerchant},
+        #{invoiceNumber},
         #{serviceCode},
         #{serviceName},
         #{jenis},
@@ -24,5 +26,9 @@
         #{totalAmount},
         now())
     </insert>
+
+    <select id="countHistoryTransaksi" resultType="int">
+        select count(*) from history_transaksi
+    </select>
 
 </mapper>

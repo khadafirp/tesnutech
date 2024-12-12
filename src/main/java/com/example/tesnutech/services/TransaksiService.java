@@ -9,12 +9,16 @@ import com.example.tesnutech.model.SaldoUserModel;
 import com.example.tesnutech.model.UserModel;
 import com.example.tesnutech.pojos.HistoryTransaksiPojo;
 import com.example.tesnutech.pojos.PpobMerchantPojo;
+import com.example.tesnutech.pojos.SaldoUserPojo;
 import com.example.tesnutech.utils.AuthorizatoinValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -71,16 +75,27 @@ public class TransaksiService {
                             response.put("statusCode", HttpStatus.BAD_REQUEST.value());
                             response.put("message", "saldo tidak cukup.");
                         } else {
+                            int count = historyTransaksiMapper.countHistoryTransaksi() + 1;
+
+                            LocalDateTime myDateObj = LocalDateTime.now();
+                            DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                            String formattedDate = myDateObj.format(myFormatObj);
+
                             param.setIdHistoryTransaksi(UUID.randomUUID().toString());
                             param.setIdUser(dataUser.getIdUser());
                             param.setIdPpobMerchant(ppobMerchant.getIdPpobMerchant());
+                            param.setInvoiceNumber("INV" + formattedDate.replace("-", "") + "-" + count);
                             param.setServiceCode(ppobMerchant.getServiceCode());
                             param.setServiceName(ppobMerchant.getServiceName());
                             param.setJenis(ppobMerchant.getJenis());
                             param.setTransactionType("PAYMENT");
                             param.setTotalAmount(ppobMerchant.getPrice());
+                            historyTransaksiMapper.tambahTransaksi(param);
 
-                            historyTransaksiMapper.addNewTransaksi(param);
+                            SaldoUserPojo saldoUserPojo = new SaldoUserPojo();
+                            saldoUserPojo.setIdUser(dataUser.getIdUser());
+                            saldoUserPojo.setTop_up_amount(balance.getBalance() - ppobMerchant.getPrice());
+                            saldoUserMapper.updateSaldoUser(saldoUserPojo);
 
                             response.put("statusCode", HttpStatus.OK.value());
                             response.put("message", "sukses.");
