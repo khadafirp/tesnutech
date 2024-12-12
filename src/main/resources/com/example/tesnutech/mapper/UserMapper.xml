@@ -7,13 +7,13 @@
         a.user_id as idUser,
         a.email as email,
         a.password as password
-        from user a
+        from table_user a
         where a.email = #{email}
         and a.password = #{password}
     </select>
 
     <insert id="daftarAkun" parameterType="com.example.tesnutech.pojos.UserPojo">
-        insert into user(
+        insert into table_user(
         user_id,
         email,
         password,
